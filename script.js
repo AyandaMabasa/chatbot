@@ -2,56 +2,43 @@ const chatLog = document.getElementById("chat-log");
 const userInput = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
 
-// Simple responses dictionary
-const responses = {
-  "hello": "Hi there! How can I assist you today?",
-  "hi": "Hello! What can I do for you?",
-  "how are you": "I’m just a bot, but I’m here to help you!",
-  "what is your name": "I’m your friendly chatbot.",
-  "help": "Sure! Ask me anything you want.",
-  "what can you do": "I can chat with you and answer simple questions.",
-  "bye": "Goodbye! Have a great day.",
-  "thank you": "You’re welcome!",
-  // Add more phrases/responses here
-};
+sendBtn.addEventListener("click", sendMessage);
+userInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") sendMessage();
+});
 
-function getResponse(message) {
-  message = message.toLowerCase();
-  for (let key in responses) {
-    if (message.includes(key)) {
-      return responses[key];
-    }
-  }
-  return "Sorry, I don't understand that. Could you please rephrase?";
+function sendMessage() {
+  const message = userInput.value.trim();
+  if (!message) return;
+
+  addMessage("user", message);
+  respondToUser(message);
+  userInput.value = "";
 }
 
-function appendMessage(text, sender) {
-  const messageDiv = document.createElement("div");
-  messageDiv.classList.add("message", sender);
-  messageDiv.textContent = text;
-  chatLog.appendChild(messageDiv);
+function addMessage(sender, text) {
+  const msgDiv = document.createElement("div");
+  msgDiv.className = `message ${sender}`;
+  msgDiv.textContent = text;
+  chatLog.appendChild(msgDiv);
   chatLog.scrollTop = chatLog.scrollHeight;
 }
 
-function handleSend() {
-  const message = userInput.value.trim();
-  if (!message) return;
-  
-  appendMessage(message, "user");
-  
-  // Simulate bot response delay
-  setTimeout(() => {
-    const botReply = getResponse(message);
-    appendMessage(botReply, "bot");
-  }, 500);
-  
-  userInput.value = "";
-  userInput.focus();
-}
+function respondToUser(input) {
+  const cleaned = input.toLowerCase();
+  let response = "";
 
-sendBtn.addEventListener("click", handleSend);
-userInput.addEventListener("keydown", e => {
-  if (e.key === "Enter") {
-    handleSend();
+  if (cleaned.includes("hello") || cleaned.includes("hi")) {
+    response = "Hi there! 👋 How can I help you today?";
+  } else if (cleaned.includes("how are you")) {
+    response = "I'm just code, but I'm doing great! 😊";
+  } else if (cleaned.includes("bye")) {
+    response = "Goodbye! Come chat anytime.";
+  } else if (cleaned.includes("your name")) {
+    response = "You can call me ChatMate.";
+  } else {
+    response = "I'm still learning, but I'll do my best to help!";
   }
-});
+
+  setTimeout(() => addMessage("bot", response), 600);
+}
