@@ -2,43 +2,59 @@ const chatLog = document.getElementById("chat-log");
 const userInput = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
 
-sendBtn.addEventListener("click", sendMessage);
-userInput.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") sendMessage();
-});
+// Smart chatbot logic
+function getBotResponse(input) {
+  input = input.toLowerCase();
 
-function sendMessage() {
-  const message = userInput.value.trim();
-  if (!message) return;
+  if (input.includes("hello") || input.includes("hi")) {
+    return "Hello! How can I help you today?";
+  }
+  if (input.includes("how are you")) {
+    return "I'm just a bot, but I'm doing great! Thanks for asking.";
+  }
+  if (input.includes("your name")) {
+    return "I'm your friendly assistant chatbot.";
+  }
+  if (input.includes("bye")) {
+    return "Goodbye! Have a wonderful day.";
+  }
+  if (input.includes("help")) {
+    return "I'm here to answer your questions. Try asking about my features!";
+  }
+  if (input.includes("time")) {
+    return `The current time is ${new Date().toLocaleTimeString()}.`;
+  }
+  if (input.includes("date")) {
+    return `Today is ${new Date().toLocaleDateString()}.`;
+  }
 
-  addMessage("user", message);
-  respondToUser(message);
-  userInput.value = "";
+  return "I'm still learning! Try asking something else.";
 }
 
-function addMessage(sender, text) {
-  const msgDiv = document.createElement("div");
-  msgDiv.className = `message ${sender}`;
-  msgDiv.textContent = text;
-  chatLog.appendChild(msgDiv);
+// Display message
+function addMessage(message, sender) {
+  const messageDiv = document.createElement("div");
+  messageDiv.classList.add("message", sender);
+  messageDiv.textContent = message;
+  chatLog.appendChild(messageDiv);
   chatLog.scrollTop = chatLog.scrollHeight;
 }
 
-function respondToUser(input) {
-  const cleaned = input.toLowerCase();
-  let response = "";
+// Handle user input
+function handleUserInput() {
+  const input = userInput.value.trim();
+  if (input === "") return;
 
-  if (cleaned.includes("hello") || cleaned.includes("hi")) {
-    response = "Hi there! 👋 How can I help you today?";
-  } else if (cleaned.includes("how are you")) {
-    response = "I'm just code, but I'm doing great! 😊";
-  } else if (cleaned.includes("bye")) {
-    response = "Goodbye! Come chat anytime.";
-  } else if (cleaned.includes("your name")) {
-    response = "You can call me ChatMate.";
-  } else {
-    response = "I'm still learning, but I'll do my best to help!";
-  }
+  addMessage(input, "user");
+  const botResponse = getBotResponse(input);
+  setTimeout(() => addMessage(botResponse, "bot"), 500);
 
-  setTimeout(() => addMessage("bot", response), 600);
+  userInput.value = "";
 }
+
+// Event listeners
+sendBtn.addEventListener("click", handleUserInput);
+userInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") handleUserInput();
+});
+
