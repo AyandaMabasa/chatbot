@@ -21,17 +21,10 @@ body {
   padding: 20px;
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-weight: 700;
-  color: #2c3e50;
-}
-
 #chatbox {
   display: flex;
   flex-direction: column;
-  height: 400px;
+  height: 500px;
 }
 
 #chat-log {
@@ -87,5 +80,6 @@ h1 {
 #send-btn:hover {
   background-color: #16a085;
 }
+
 
 
