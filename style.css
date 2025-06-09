@@ -1,83 +1,74 @@
 body {
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #4e54c8, #8f94fb);
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #74ebd5, #acb6e5);
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
 
-.chat-container {
-  width: 95%;
-  max-width: 450px;
-  height: 600px;
+.container {
   background: white;
-  border-radius: 16px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  width: 90%;
+  max-width: 500px;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  height: 600px;
+  padding: 20px;
 }
 
-.chat-log {
+#chat-log {
   flex-grow: 1;
-  padding: 20px;
   overflow-y: auto;
-  background-color: #f5f7fa;
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background: #f9f9f9;
 }
 
 .message {
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   line-height: 1.4;
-  padding: 10px 14px;
-  border-radius: 12px;
-  max-width: 80%;
-  font-size: 16px;
 }
 
-.user {
-  background-color: #d1ecf1;
-  align-self: flex-end;
-  color: #0c5460;
+.message.user {
+  text-align: right;
+  color: #1abc9c;
 }
 
-.bot {
-  background-color: #e2e3e5;
-  align-self: flex-start;
-  color: #383d41;
+.message.bot {
+  text-align: left;
+  color: #333;
 }
 
 .input-area {
   display: flex;
-  border-top: 1px solid #ddd;
-  padding: 10px;
-  background-color: #fff;
+  gap: 10px;
 }
 
 #user-input {
-  flex-grow: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  flex: 1;
+  padding: 12px;
   font-size: 16px;
-  margin-right: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
 #send-btn {
-  padding: 10px 16px;
-  background-color: #4e54c8;
+  padding: 12px;
+  background: #1abc9c;
   color: white;
   font-weight: bold;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 #send-btn:hover {
-  background-color: #3b41a1;
+  background: #16a085;
 }
-
-
 
