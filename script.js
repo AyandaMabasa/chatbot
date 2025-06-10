@@ -47,14 +47,19 @@ const responses = {
   ]
 };
 
+// Context memory variables
+let lastUserMessage = "";
+let lastBotResponse = "";
+
 // Add welcome message when page loads
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener("DOMContentLoaded", () => {
   appendMessage("bot", "Hello! I'm your AI assistant. How can I help you today?");
 });
 
 function appendMessage(sender, text) {
   const message = document.createElement("div");
-  message.classList.add("message", `${sender}-message`);
+  message.classList.add("message");
+  message.classList.add(sender === "user" ? "user-message" : "bot-message");
   message.innerText = text;
   chatLog.appendChild(message);
   chatLog.scrollTop = chatLog.scrollHeight;
@@ -80,19 +85,44 @@ function removeTypingIndicator() {
 
 function getBotResponse(userMessage) {
   const lowerCaseMessage = userMessage.toLowerCase();
-  
-  // Check for specific patterns
+
+  // Use compromise.js NLP to detect greetings
+  const doc = nlp(lowerCaseMessage);
+
+  if (doc.has("#Greeting")) {
+    const greetingsResponses = responses.greetings;
+    lastUserMessage = lowerCaseMessage;
+    lastBotResponse = greetingsResponses[Math.floor(Math.random() * greetingsResponses.length)];
+    return lastBotResponse;
+  }
+
+  // Context-aware example for name questions
+  if (lowerCaseMessage.includes("your name")) {
+    if (lastBotResponse && lastBotResponse.includes("ChatBot")) {
+      lastUserMessage = lowerCaseMessage;
+      lastBotResponse = "Yep, still ChatBot! What else would you like to know?";
+      return lastBotResponse;
+    }
+  }
+
+  // Check knowledge base triggers
   for (const [category, triggers] of Object.entries(knowledgeBase)) {
     for (const trigger of triggers) {
       if (lowerCaseMessage.includes(trigger)) {
         const possibleResponses = responses[category];
-        return possibleResponses[Math.floor(Math.random() * possibleResponses.length)];
+        const response = possibleResponses[Math.floor(Math.random() * possibleResponses.length)];
+        lastUserMessage = lowerCaseMessage;
+        lastBotResponse = response;
+        return response;
       }
     }
   }
-  
-  // If no specific pattern matched, use a default response
-  return responses.default[Math.floor(Math.random() * responses.default.length)];
+
+  // Default fallback
+  const defaultResponse = responses.default[Math.floor(Math.random() * responses.default.length)];
+  lastUserMessage = lowerCaseMessage;
+  lastBotResponse = defaultResponse;
+  return defaultResponse;
 }
 
 async function handleUserMessage() {
@@ -101,24 +131,13 @@ async function handleUserMessage() {
 
   appendMessage("user", input);
   userInput.value = "";
-  
+
   showTypingIndicator();
-  
+
   // Simulate thinking time
   setTimeout(() => {
     removeTypingIndicator();
     const response = getBotResponse(input);
     appendMessage("bot", response);
-  }, 500 + Math.random() * 1000); // Random delay between 0.5-1.5 seconds
-}
+  }, 700 + Math.random() * 800
 
-sendBtn.addEventListener("click", handleUserMessage);
-
-userInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    handleUserMessage();
-  }
-});
-
-// Auto-focus input when page loads
-userInput.focus();
