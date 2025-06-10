@@ -2,90 +2,73 @@ const chatLog = document.getElementById("chat-log");
 const userInput = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
 
-// Simple brain — keyword-based logic
 const knowledgeBase = {
-  greetings: ["hi", "hello", "hey", "greetings", "good morning", "good afternoon"],
+  greetings: ["hi", "hello", "hey", "good morning", "good afternoon"],
   goodbye: ["bye", "goodbye", "see you", "farewell"],
-  thanks: ["thanks", "thank you"],
-  creator: ["who made you", "who created you"],
-  abilities: ["what can you do", "your abilities", "help"],
+  thanks: ["thanks", "thank you", "appreciate it"],
+  creator: ["who made you", "who created you", "who built you"],
+  abilities: ["what can you do", "your abilities", "how can you help"],
   name: ["your name", "who are you"],
-  joke: ["joke", "make me laugh"],
-  time: ["what time is it", "current time"],
-  date: ["what date is it", "today's date"]
+  joke: ["tell me a joke", "make me laugh", "funny"],
+  time: ["what time is it", "current time", "time now"],
+  date: ["what's the date", "today's date", "date now"]
 };
 
 const responses = {
-  greetings: ["Hi there! 😊", "Hello! How can I help?", "Hey! What’s up?"],
-  goodbye: ["Goodbye! 👋", "See you soon!", "Take care!"],
-  thanks: ["You're welcome!", "No problem!", "Happy to help!"],
-  creator: ["I was created by Ayanda Mabasa 💻"],
-  abilities: ["I can chat with you, answer basic questions, and make you smile 😄"],
-  name: ["I'm your chatbot assistant!", "You can call me ChatBuddy!"],
-  joke: [
-    "Why don’t scientists trust atoms? Because they make up everything!",
-    "I told a joke about construction... but I'm still working on it. 😅"
-  ],
+  greetings: ["Hello. How can I assist you today?", "Hi there. What can I help you with?"],
+  goodbye: ["Goodbye. Let me know if you need anything else.", "Take care. I'm here if you have more questions."],
+  thanks: ["You're welcome.", "I'm here to help."],
+  creator: ["I was developed by Ayanda Mabasa."],
+  abilities: ["I can answer basic questions, provide information, and assist with tasks within my scope."],
+  name: ["I'm your virtual assistant chatbot."],
+  joke: ["I'm currently focused on providing helpful answers. Let me know how I can assist."],
   time: [new Date().toLocaleTimeString()],
   date: [new Date().toLocaleDateString()],
-  default: ["Hmm, I’m not sure. Try asking something else! 🤔"]
+  default: [
+    "I'm not certain I understand. Could you clarify your question?",
+    "Let me look into that. Can you rephrase or add more detail?",
+    "That's a valid question. I may not have the full answer, but I'm here to assist."
+  ]
 };
 
-// Show message in chat
 function appendMessage(sender, text) {
-  const msg = document.createElement("div");
-  msg.className = `message ${sender}-message`;
-  msg.textContent = text;
-  chatLog.appendChild(msg);
+  const message = document.createElement("div");
+  message.classList.add("message", `${sender}-message`);
+  message.innerText = text;
+  chatLog.appendChild(message);
   chatLog.scrollTop = chatLog.scrollHeight;
 }
 
-// Bot typing effect
-function showTyping() {
-  const typing = document.createElement("div");
-  typing.id = "typing";
-  typing.className = "typing";
-  typing.innerHTML = `<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>`;
-  chatLog.appendChild(typing);
-  chatLog.scrollTop = chatLog.scrollHeight;
-}
-
-function removeTyping() {
-  const typing = document.getElementById("typing");
-  if (typing) typing.remove();
-}
-
-// Smart matching
-function getResponse(message) {
-  const msg = message.toLowerCase();
-  for (let key in knowledgeBase) {
-    if (knowledgeBase[key].some(phrase => msg.includes(phrase))) {
-      const possible = responses[key];
-      return possible[Math.floor(Math.random() * possible.length)];
+function getBotResponse(userMessage) {
+  const lower = userMessage.toLowerCase();
+  for (const [category, triggers] of Object.entries(knowledgeBase)) {
+    if (triggers.some(trigger => lower.includes(trigger))) {
+      const options = responses[category];
+      return options[Math.floor(Math.random() * options.length)];
     }
   }
   return responses.default[Math.floor(Math.random() * responses.default.length)];
 }
 
-// Handle user input
-function handleMessage() {
+function handleUserMessage() {
   const input = userInput.value.trim();
   if (!input) return;
-
   appendMessage("user", input);
   userInput.value = "";
 
-  showTyping();
   setTimeout(() => {
-    removeTyping();
-    const reply = getResponse(input);
-    appendMessage("bot", reply);
-  }, 700);
+    const response = getBotResponse(input);
+    appendMessage("bot", response);
+  }, 500);
 }
 
-// Listeners
-sendBtn.addEventListener("click", handleMessage);
-userInput.addEventListener("keydown", e => {
-  if (e.key === "Enter") handleMessage();
+sendBtn.addEventListener("click", handleUserMessage);
+userInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") handleUserMessage();
 });
+
+window.addEventListener("DOMContentLoaded", () => {
+  appendMessage("bot", "Welcome. I'm your assistant. How can I help you?");
+});
+
 
