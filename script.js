@@ -1,18 +1,13 @@
 const API_KEY = "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";
-const MODEL = "openai/gpt-3.5-turbo";
+const MODEL = "openrouter/gpt-3.5-turbo";
 
 const sendBtn = document.getElementById("send-btn");
 const userInput = document.getElementById("user-input");
 const chatLog = document.getElementById("chat-log");
-const scrollArrow = document.getElementById("scroll-arrow");
 
 sendBtn.addEventListener("click", sendMessage);
 userInput.addEventListener("keydown", e => {
   if (e.key === "Enter") sendMessage();
-});
-
-scrollArrow.addEventListener("click", () => {
-  chatLog.scrollTo({ top: chatLog.scrollHeight, behavior: "smooth" });
 });
 
 async function sendMessage() {
@@ -36,8 +31,6 @@ async function sendMessage() {
     });
 
     const data = await response.json();
-    console.log("API Response:", data);
-
     const reply = data.choices?.[0]?.message?.content || data.error?.message || "Sorry, I couldn't understand that.";
     appendMessage("Bot", reply, "bot-message");
   } catch (error) {
@@ -51,6 +44,8 @@ function appendMessage(sender, text, className) {
   msg.className = `message ${className}`;
   msg.textContent = text;
   chatLog.appendChild(msg);
+
+  // Auto-scroll to bottom
   setTimeout(() => {
     chatLog.scrollTop = chatLog.scrollHeight;
   }, 100);
