@@ -1,5 +1,5 @@
 const API_KEY = "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";
-const MODEL = "openai/gpt-3.5-turbo"; // or use "openai/gpt-4"
+const MODEL = "openrouter/gpt-3.5-turbo";
 
 const sendBtn = document.getElementById("send-btn");
 const userInput = document.getElementById("user-input");
@@ -12,7 +12,7 @@ userInput.addEventListener("keydown", e => {
 });
 
 scrollArrow.addEventListener("click", () => {
-  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+  chatLog.scrollTo({ top: chatLog.scrollHeight, behavior: "smooth" });
 });
 
 async function sendMessage() {
@@ -36,9 +36,12 @@ async function sendMessage() {
     });
 
     const data = await response.json();
-    const reply = data.choices?.[0]?.message?.content || "Sorry, I couldn't understand that.";
+    console.log("API Response:", data); // ✅ Debugging
+
+    const reply = data.choices?.[0]?.message?.content || data.error?.message || "Sorry, I couldn't understand that.";
     appendMessage("Bot", reply, "bot-message");
   } catch (error) {
+    console.error("API Error:", error);
     appendMessage("Bot", "Error: Something went wrong.", "bot-message");
   }
 }
@@ -48,8 +51,8 @@ function appendMessage(sender, text, className) {
   msg.className = `message ${className}`;
   msg.textContent = text;
   chatLog.appendChild(msg);
-  chatLog.scrollTop = chatLog.scrollHeight;
+  setTimeout(() => {
+    chatLog.scrollTop = chatLog.scrollHeight;
+  }, 100);
 }
-
-
 
