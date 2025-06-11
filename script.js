@@ -1,5 +1,5 @@
 const API_KEY = "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";
-const MODEL = "openrouter/gpt-3.5-turbo";
+const MODEL = "openai/gpt-3.5-turbo";
 
 const sendBtn = document.getElementById("send-btn");
 const userInput = document.getElementById("user-input");
@@ -36,7 +36,7 @@ async function sendMessage() {
     });
 
     const data = await response.json();
-    console.log("API Response:", data); // ✅ Debugging
+    console.log("API Response:", data);
 
     const reply = data.choices?.[0]?.message?.content || data.error?.message || "Sorry, I couldn't understand that.";
     appendMessage("Bot", reply, "bot-message");
