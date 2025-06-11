@@ -39,6 +39,7 @@ body, html {
   margin-bottom: 10px;
   display: flex;
   flex-direction: column;
+  scroll-behavior: smooth;
 }
 
 .message {
@@ -82,18 +83,3 @@ body, html {
   font-size: 16px;
   cursor: pointer;
 }
-
-#scroll-arrow {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  font-size: 24px;
-  padding: 10px;
-  border-radius: 50%;
-  background: #0ea5e9;
-  color: white;
-  border: none;
-  cursor: pointer;
-  z-index: 999;
-}
-
