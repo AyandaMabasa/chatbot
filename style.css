@@ -48,7 +48,6 @@ body, html {
   border-radius: 10px;
   max-width: 80%;
   line-height: 1.5;
-  word-wrap: break-word;
 }
 
 .user-message {
@@ -81,13 +80,29 @@ body, html {
   border: none;
   color: white;
   border-radius: 10px;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 16px;
   cursor: pointer;
-  transition: background 0.3s;
 }
 
 #send-btn:hover {
+  background: #0284c7;
+}
+
+#scroll-arrow {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-size: 24px;
+  background: #0ea5e9;
+  color: white;
+  border: none;
+  padding: 12px 14px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: none;
+}
+
+#scroll-arrow:hover {
   background: #0284c7;
 }
 
