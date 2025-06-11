@@ -1,6 +1,24 @@
 const chatLog = document.getElementById("chat-log");
 const userInput = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
+const scrollArrow = document.getElementById("scroll-arrow");
+
+// Auto-scroll arrow visibility
+chatLog.addEventListener("scroll", () => {
+  scrollArrow.style.display = chatLog.scrollTop + chatLog.clientHeight < chatLog.scrollHeight ? "block" : "none";
+});
+
+scrollArrow.addEventListener("click", () => {
+  chatLog.scrollTop = chatLog.scrollHeight;
+});
+
+function appendMessage(sender, text) {
+  const message = document.createElement("div");
+  message.className = `message ${sender}-message`;
+  message.innerText = text;
+  chatLog.appendChild(message);
+  chatLog.scrollTop = chatLog.scrollHeight;
+}
 
 async function sendMessage() {
   const input = userInput.value.trim();
@@ -8,32 +26,9 @@ async function sendMessage() {
 
   appendMessage("user", input);
   userInput.value = "";
-  userInput.focus();
 
-  appendMessage("bot", "...");
+  appendMessage("bot", "Typing...");
 
-  const reply = await fetchChatGPTResponse(input);
-
-  removeLastBotMessage();
-  appendMessage("bot", reply);
-}
-
-function appendMessage(sender, text) {
-  const msg = document.createElement("div");
-  msg.className = `message ${sender}-message`;
-  msg.innerText = text;
-  chatLog.appendChild(msg);
-  chatLog.scrollTop = chatLog.scrollHeight;
-}
-
-function removeLastBotMessage() {
-  const messages = document.querySelectorAll(".bot-message");
-  if (messages.length > 0) {
-    messages[messages.length - 1].remove();
-  }
-}
-
-async function fetchChatGPTResponse(userMessage) {
   try {
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
@@ -43,23 +38,18 @@ async function fetchChatGPTResponse(userMessage) {
       },
       body: JSON.stringify({
         model: "openai/gpt-3.5-turbo",
-        messages: [
-          {
-            role: "system",
-            content: "You are a helpful assistant. Only respond to what the user asks without mentioning internships, personal context, or unrelated topics."
-          },
-          {
-            role: "user",
-            content: userMessage
-          }
-        ]
+        messages: [{ role: "user", content: input }]
       })
     });
 
     const data = await response.json();
-    return data.choices?.[0]?.message?.content?.trim() || "Sorry, I couldn't generate a response.";
-  } catch (err) {
-    return "Error fetching response. Please check your internet or API key.";
+    const reply = data.choices?.[0]?.message?.content || "Sorry, I couldn't understand that.";
+    
+    document.querySelector(".bot-message:last-child").remove(); // remove "Typing..."
+    appendMessage("bot", reply.trim());
+  } catch (error) {
+    document.querySelector(".bot-message:last-child").remove();
+    appendMessage("bot", "Error: Unable to connect. Please try again later.");
   }
 }
 
