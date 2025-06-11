@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Chat Assistant</title>
+  <title>Virtual Assistant</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <div id="chatbox">
-      <div id="chat-log"></div>
-      <input type="text" id="user-input" placeholder="Ask me anything..." autocomplete="off" />
+  <div class="chat-container">
+    <div class="chat-header">Virtual Assistant</div>
+    <div id="chat-log" class="chat-log"></div>
+    <div class="input-area">
+      <input type="text" id="user-input" placeholder="Type your question..." autocomplete="off" />
       <button id="send-btn">Send</button>
     </div>
   </div>
