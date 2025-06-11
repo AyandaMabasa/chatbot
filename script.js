@@ -2,34 +2,9 @@ const chatLog = document.getElementById("chat-log");
 const userInput = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
 
-const knowledgeBase = {
-  greetings: ["hi", "hello", "hey", "good morning", "good afternoon"],
-  goodbye: ["bye", "goodbye", "see you", "farewell"],
-  thanks: ["thanks", "thank you", "appreciate it"],
-  creator: ["who made you", "who created you", "who built you"],
-  abilities: ["what can you do", "your abilities", "how can you help"],
-  name: ["your name", "who are you"],
-  joke: ["tell me a joke", "make me laugh", "funny"],
-  time: ["what time is it", "current time", "time now"],
-  date: ["what's the date", "today's date", "date now"]
-};
-
-const responses = {
-  greetings: ["Hello. How can I assist you today?", "Hi there. What can I help you with?"],
-  goodbye: ["Goodbye. Let me know if you need anything else.", "Take care. I'm here if you have more questions."],
-  thanks: ["You're welcome.", "I'm here to help."],
-  creator: ["I was developed by Ayanda Mabasa."],
-  abilities: ["I can answer basic questions, provide information, and assist with tasks within my scope."],
-  name: ["I'm your virtual assistant chatbot."],
-  joke: ["I'm currently focused on providing helpful answers. Let me know how I can assist."],
-  time: [new Date().toLocaleTimeString()],
-  date: [new Date().toLocaleDateString()],
-  default: [
-    "I'm not certain I understand. Could you clarify your question?",
-    "Let me look into that. Can you rephrase or add more detail?",
-    "That's a valid question. I may not have the full answer, but I'm here to assist."
-  ]
-};
+window.addEventListener('DOMContentLoaded', () => {
+  appendMessage("bot", "Hello, I'm your virtual assistant. How can I help you today?");
+});
 
 function appendMessage(sender, text) {
   const message = document.createElement("div");
@@ -39,36 +14,56 @@ function appendMessage(sender, text) {
   chatLog.scrollTop = chatLog.scrollHeight;
 }
 
-function getBotResponse(userMessage) {
-  const lower = userMessage.toLowerCase();
-  for (const [category, triggers] of Object.entries(knowledgeBase)) {
-    if (triggers.some(trigger => lower.includes(trigger))) {
-      const options = responses[category];
-      return options[Math.floor(Math.random() * options.length)];
-    }
-  }
-  return responses.default[Math.floor(Math.random() * responses.default.length)];
+function showTypingIndicator() {
+  const typing = document.createElement("div");
+  typing.id = "typing-indicator";
+  typing.className = "typing";
+  typing.innerHTML = `<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>`;
+  chatLog.appendChild(typing);
+  chatLog.scrollTop = chatLog.scrollHeight;
 }
 
-function handleUserMessage() {
+function removeTypingIndicator() {
+  const typing = document.getElementById("typing-indicator");
+  if (typing) typing.remove();
+}
+
+async function handleUserMessage() {
   const input = userInput.value.trim();
   if (!input) return;
+
   appendMessage("user", input);
   userInput.value = "";
+  showTypingIndicator();
 
   setTimeout(() => {
+    removeTypingIndicator();
     const response = getBotResponse(input);
     appendMessage("bot", response);
-  }, 500);
+  }, 800);
+}
+
+function getBotResponse(message) {
+  const msg = message.toLowerCase();
+
+  if (msg.includes("your name")) return "You can call me Ayanda Assistant.";
+  if (msg.includes("who created you")) return "I was built by Ayanda Mabasa as a professional chatbot project.";
+  if (msg.includes("how are you")) return "I'm running smoothly. How can I assist you?";
+  if (msg.includes("help") || msg.includes("what can you do")) return "I can respond to basic questions, simulate intelligent conversation, and serve as a virtual assistant.";
+  if (msg.includes("thank")) return "You're welcome. Let me know if there's anything else.";
+  if (msg.includes("bye") || msg.includes("goodbye")) return "Goodbye. Best of luck with your internship applications.";
+  if (msg.includes("joke")) return "I’m focused on professional topics. Let me know if you have a serious question.";
+
+  if (msg.endsWith("?")) {
+    return "That's an insightful question. Let me get back to you with more context as I improve.";
+  }
+
+  return "I’m still learning to respond to that. Please rephrase or ask something else.";
 }
 
 sendBtn.addEventListener("click", handleUserMessage);
 userInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") handleUserMessage();
-});
-
-window.addEventListener("DOMContentLoaded", () => {
-  appendMessage("bot", "Welcome. I'm your assistant. How can I help you?");
 });
 
 
