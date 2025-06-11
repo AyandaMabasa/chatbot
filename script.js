@@ -3,34 +3,35 @@ const userInput = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
 const scrollArrow = document.getElementById("scroll-arrow");
 
-// Auto-scroll arrow visibility
+// Scroll button logic
 chatLog.addEventListener("scroll", () => {
-  scrollArrow.style.display = chatLog.scrollTop + chatLog.clientHeight < chatLog.scrollHeight ? "block" : "none";
+  scrollArrow.style.display = chatLog.scrollTop > 100 ? "block" : "none";
 });
-
 scrollArrow.addEventListener("click", () => {
   chatLog.scrollTop = chatLog.scrollHeight;
 });
 
-function appendMessage(sender, text) {
-  const message = document.createElement("div");
-  message.className = `message ${sender}-message`;
-  message.innerText = text;
-  chatLog.appendChild(message);
+// Add message to chat
+function appendMessage(role, text) {
+  const msg = document.createElement("div");
+  msg.className = `message ${role}-message`;
+  msg.textContent = text;
+  chatLog.appendChild(msg);
   chatLog.scrollTop = chatLog.scrollHeight;
 }
 
-async function sendMessage() {
+// Handle user message
+async function handleUserMessage() {
   const input = userInput.value.trim();
   if (!input) return;
 
   appendMessage("user", input);
   userInput.value = "";
 
-  appendMessage("bot", "Typing...");
+  appendMessage("bot", "Thinking...");
 
   try {
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
         "Authorization": "Bearer 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",
@@ -42,20 +43,21 @@ async function sendMessage() {
       })
     });
 
-    const data = await response.json();
-    const reply = data.choices?.[0]?.message?.content || "Sorry, I couldn't understand that.";
+    const data = await res.json();
+    const reply = data?.choices?.[0]?.message?.content?.trim() || "I'm sorry, I couldn't generate a response.";
     
-    document.querySelector(".bot-message:last-child").remove(); // remove "Typing..."
-    appendMessage("bot", reply.trim());
-  } catch (error) {
-    document.querySelector(".bot-message:last-child").remove();
-    appendMessage("bot", "Error: Unable to connect. Please try again later.");
+    chatLog.lastChild.remove(); // remove 'Thinking...'
+    appendMessage("bot", reply);
+  } catch (err) {
+    chatLog.lastChild.remove();
+    appendMessage("bot", "Something went wrong. Please try again.");
   }
 }
 
-sendBtn.addEventListener("click", sendMessage);
+// Event listeners
+sendBtn.addEventListener("click", handleUserMessage);
 userInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") sendMessage();
+  if (e.key === "Enter") handleUserMessage();
 });
 
 
