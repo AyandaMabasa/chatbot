@@ -75,7 +75,7 @@ for (let i = 0; i < 950; i++) {
 }
 
 function getBotResponse(input) {
-  input = input.toLowerCase();
+  input = input.toLowerCase().replace(/[^\w\s]/gi, ""); // normalize input
   for (let key in responses) {
     if (input.includes(key)) {
       const res = responses[key];
@@ -133,4 +133,3 @@ function addMessage(sender, text) {
   chatBox.appendChild(msg);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
-
