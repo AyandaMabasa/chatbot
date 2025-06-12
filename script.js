@@ -1,4 +1,4 @@
-const API_KEY = "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";
+const API_KEY = "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"
 
 const chatForm = document.getElementById("chatForm");
 const userInput = document.getElementById("userInput");
@@ -7,9 +7,7 @@ const scrollTopBtn = document.getElementById("scrollTop");
 const themeToggle = document.getElementById("themeToggle");
 const micButton = document.getElementById("micButton");
 
-// Initial theme
 let isDark = false;
-document.body.classList.add("light");
 
 themeToggle.addEventListener("click", () => {
   isDark = !isDark;
@@ -58,7 +56,6 @@ async function fetchOpenRouter(prompt) {
         ],
       }),
     });
-
     const data = await response.json();
     return data.choices?.[0]?.message?.content || "(No response)";
   } catch (error) {
@@ -67,9 +64,13 @@ async function fetchOpenRouter(prompt) {
   }
 }
 
-// 🎤 Speech-to-text
 micButton.addEventListener("click", () => {
-  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    alert("Speech recognition not supported in this browser.");
+    return;
+  }
+  const recognition = new SpeechRecognition();
   recognition.lang = "en-US";
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
@@ -87,9 +88,10 @@ micButton.addEventListener("click", () => {
   recognition.start();
 });
 
-// 🔊 Text-to-speech
 function speakText(text) {
+  if (!('speechSynthesis' in window)) return;
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "en-US";
   speechSynthesis.speak(utterance);
 }
+
