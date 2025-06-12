@@ -5,7 +5,7 @@ const themeToggle = document.getElementById('themeToggle');
 const scrollTop = document.getElementById('scrollTop');
 const micButton = document.getElementById('micButton');
 
-// Display messages
+// Add messages to the chat
 function addMessage(text, className) {
   const msg = document.createElement('div');
   msg.textContent = text;
@@ -14,44 +14,51 @@ function addMessage(text, className) {
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Reply logic
+// Bot responses
 function getBotResponse(input) {
-  const message = input.toLowerCase();
-
+  const message = input.toLowerCase().trim();
   const now = new Date();
   const date = now.toLocaleDateString();
   const time = now.toLocaleTimeString();
 
   if (message.includes("hi") || message.includes("hello") || message.includes("hey")) {
-    return "Hello! How can I assist you?";
+    return "Hey there! 👋";
   } else if (message.includes("how are you")) {
-    return "I'm just code, but I'm running great!";
+    return "I'm running perfectly, thanks for asking! 🤖";
   } else if (message.includes("bye")) {
-    return "Goodbye! Have a great day.";
+    return "Goodbye! Come back anytime. 😊";
   } else if (message.includes("thank")) {
-    return "You're welcome!";
+    return "You're very welcome!";
   } else if (message.includes("your name")) {
-    return "I’m your friendly AI chatbot.";
+    return "I'm your AI assistant, always here to chat!";
   } else if (message.includes("who made you")) {
-    return "I was created by Ayanda Mabasa!";
+    return "I was created with love by Ayanda Mabasa. 💻✨";
   } else if (message.includes("what can you do")) {
-    return "I can chat, answer questions, and keep you company!";
-  } else if (message.includes("tell me a joke")) {
-    return "Why don’t robots get tired? Because they recharge overnight!";
+    return "I can answer questions, tell jokes, and keep you company!";
+  } else if (message.includes("joke")) {
+    return "Why did the computer get cold? Because it left its Windows open!";
   } else if (message.includes("date")) {
     return `Today's date is ${date}.`;
   } else if (message.includes("time")) {
-    return `The current time is ${time}.`;
+    return `The time right now is ${time}.`;
   } else if (message.includes("openai")) {
-    return "OpenAI is the amazing company that powers ChatGPT!";
+    return "OpenAI builds amazing AI tools like ChatGPT!";
   } else if (message.includes("love you")) {
-    return "Aww, I love chatting with you too!";
+    return "Aww! I love chatting with you too ❤️";
+  } else if (message.includes("who are you")) {
+    return "I'm just a friendly chatbot built to talk to you!";
+  } else if (message.includes("are you real")) {
+    return "As real as code can be!";
+  } else if (message.includes("help")) {
+    return "Just type a message and I’ll do my best to respond!";
+  } else if (message.includes("weather")) {
+    return "I can't check weather yet, but it’s always sunny in the chat 🌞";
   } else {
     return "Interesting! Tell me more.";
   }
 }
 
-// On submit
+// Chat submit event
 chatForm.addEventListener('submit', e => {
   e.preventDefault();
   const input = userInput.value.trim();
@@ -70,7 +77,7 @@ themeToggle.addEventListener('click', () => {
   document.body.classList.toggle('light');
 });
 
-// Scroll to top
+// Scroll to top button
 window.addEventListener('scroll', () => {
   scrollTop.style.display = window.scrollY > 100 ? 'block' : 'none';
 });
@@ -94,3 +101,4 @@ if (recognition) {
     userInput.value = transcript;
   };
 }
+
