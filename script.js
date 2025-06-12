@@ -1,143 +1,82 @@
 // script.js
 
-const responses = {
-  // Greetings
-  "hello": "Hi there! How can I assist you today?",
-  "hi": "Hello! What would you like to talk about?",
-  "hey": "Hey! How can I help you?",
-  "good morning": "Good morning! Wishing you a productive day.",
-  "good night": "Good night! Sleep well.",
-  "how are you": "I'm just code, but I'm functioning perfectly!",
+const chatForm = document.getElementById("chatForm");
+const userInput = document.getElementById("userInput");
+const chatBox = document.getElementById("chatBox");
+const micButton = document.getElementById("micButton");
+const scrollTopBtn = document.getElementById("scrollTop");
+const themeToggle = document.getElementById("themeToggle");
 
-  // Time and date
-  "what time is it": () => new Date().toLocaleTimeString(),
-  "what's the time": () => new Date().toLocaleTimeString(),
-  "what day is it": () => new Date().toLocaleDateString(),
-  "what is today's date": () => new Date().toDateString(),
-
-  // Emotions
-  "i'm sad": "I'm sorry to hear that. Want to talk about it?",
-  "i'm happy": "That's great to hear!",
-  "i feel tired": "Maybe a little rest would help. You've got this!",
-  "i'm bored": "Let’s find something fun to do or talk about!",
-  "i feel lonely": "I'm here for you. Want to chat?",
-
-  // Learning & study
-  "how to focus": "Try the Pomodoro technique: 25 min work, 5 min break!",
-  "study tips": "Set clear goals, eliminate distractions, and take breaks.",
-  "best way to learn": "Practice, repetition, and teaching others really help!",
-  "how to read fast": "Try skimming for main ideas first, then dive deeper.",
-
-  // Technology
-  "what is ai": "AI stands for Artificial Intelligence—machines that learn!",
-  "what is coding": "Coding is giving instructions to computers to do tasks.",
-  "what's javascript": "JavaScript is a language used to make websites interactive.",
-  "what is html": "HTML is the structure of web pages using markup tags.",
-  "what is css": "CSS styles the look and layout of web pages.",
-
-  // Lifestyle
-  "how to be productive": "Start with a to-do list and tackle small tasks first.",
-  "how to stay healthy": "Eat well, sleep enough, move daily, and hydrate!",
-  "how to be happy": "Gratitude, goals, and connection often help!",
-  "how to stay fit": "Exercise regularly, even if it's just walking daily.",
-
-  // Fun
-  "tell me a joke": "Why don’t scientists trust atoms? Because they make up everything!",
-  "make me laugh": "Why did the computer go to therapy? It had too many bytes of trauma!",
-  "sing me a song": "🎶 Twinkle twinkle little code, running through the data mode...",
-  "tell me something funny": "Why was the math book sad? It had too many problems!",
-
-  // Motivation
-  "motivate me": "You’re capable of amazing things. Keep going! 💪",
-  "inspire me": "Every expert was once a beginner. Don’t give up.",
-  "can i do it": "Absolutely. Believe in yourself!",
-  "i need encouragement": "You're doing better than you think! Keep going.",
-
-  // General
-  "what is your name": "I'm your AI assistant, always here for you.",
-  "who made you": "I was crafted with love and logic!",
-  "do you sleep": "Nope! I’m awake 24/7 just for you.",
-  "what can you do": "I can answer your questions and chat with you anytime!",
-  "are you real": "I’m real in this digital world!",
-
-  // Gratitude & Goodbyes
-  "thank you": "You’re welcome!",
-  "thanks": "Glad I could help!",
-  "bye": "Goodbye! Talk to you soon.",
-  "see you": "See you later!",
-  "ok": "Alright!",
-  "cool": "Cool indeed!"
-};
-
-// Create keyword list for matching
-const keywordList = Object.keys(responses);
-
-function getBotResponse(input) {
-  input = input.toLowerCase().replace(/[^\w\s]/gi, "");
-
-  for (let key of keywordList) {
-    const keyWords = key.split(" ");
-    let match = true;
-    for (let word of keyWords) {
-      if (!input.includes(word)) {
-        match = false;
-        break;
-      }
-    }
-    if (match) {
-      const res = responses[key];
-      return typeof res === "function" ? res() : res;
-    }
-  }
-  return "Hmm, I'm not sure how to answer that yet. Try asking me something else!";
-}
-
-document.getElementById("chatForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-  const input = document.getElementById("userInput").value;
-  if (!input.trim()) return;
-
-  addMessage("user", input);
-
-  setTimeout(() => {
-    const response = getBotResponse(input);
-    addMessage("bot", response);
-  }, 500);
-
-  document.getElementById("userInput").value = "";
-});
-
-document.getElementById("micButton").addEventListener("click", () => {
-  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-  recognition.lang = "en-US";
-  recognition.start();
-
-  recognition.onresult = function (event) {
-    const transcript = event.results[0][0].transcript;
-    document.getElementById("userInput").value = transcript;
-  };
-});
-
-document.getElementById("themeToggle").addEventListener("click", () => {
+// Light/Dark mode toggle
+themeToggle.addEventListener("click", () => {
   document.body.classList.toggle("dark");
   document.body.classList.toggle("light");
 });
 
+// Scroll-to-top button
 window.onscroll = () => {
-  const scrollBtn = document.getElementById("scrollTop");
-  scrollBtn.style.display = document.documentElement.scrollTop > 100 ? "block" : "none";
+  scrollTopBtn.style.display = document.documentElement.scrollTop > 100 ? "block" : "none";
+};
+scrollTopBtn.onclick = () => {
+  document.documentElement.scrollTop = 0;
 };
 
-document.getElementById("scrollTop").addEventListener("click", () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
+// Voice input using Web Speech API
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+recognition.lang = "en-US";
+micButton.addEventListener("click", () => recognition.start());
+recognition.onresult = (event) => {
+  userInput.value = event.results[0][0].transcript;
+};
 
-function addMessage(sender, text) {
-  const chatBox = document.getElementById("chatBox");
-  const msg = document.createElement("div");
-  msg.className = `chat-message ${sender}`;
-  msg.textContent = text;
-  chatBox.appendChild(msg);
-  chatBox.scrollTop = chatBox.scrollHeight;
+const responses = {
+  "hi": ["Hello! 😊", "Hey there!", "Hi, how can I help you today?"],
+  "how are you": ["I'm just a bot, but I'm doing great! 🤖", "Fantastic, thanks for asking!"],
+  "what is your name": ["I'm your friendly AI chatbot."],
+  "what is ai": ["AI stands for Artificial Intelligence. It's how machines mimic human intelligence."],
+  "tell me a joke": ["Why did the computer go to the doctor? It had a virus! 🤣"],
+  "what time is it": [() => `It's ${new Date().toLocaleTimeString()}`],
+  "what date is it": [() => `Today is ${new Date().toLocaleDateString()}`],
+  "i'm bored": ["Want to hear a joke? Or ask me anything!", "Let's play 20 questions! You start!"],
+  "thank you": ["You're welcome! 🙌", "Anytime!"],
+  "bye": ["Goodbye! 👋", "See you later!"],
+  "sure": ["Great! Let's do it!", "Alright, sounds good!"],
+  "okay": ["Got it! ✅", "Okay, what's next?"]
+};
+
+const fallbackResponses = [
+  "That's interesting! Tell me more.",
+  "I'm still learning, but I’d love to hear more.",
+  "Hmm, I'm not sure yet—but I'm here to chat!",
+  "Could you rephrase that? I'm curious.",
+  "That's a new one for me, but it sounds cool!",
+  "Let's explore that together!",
+  "Tell me more about it!",
+  "That's beyond my current knowledge, but I’m learning fast!"
+];
+
+function getBotResponse(input) {
+  const cleaned = input.toLowerCase();
+  for (const key in responses) {
+    if (cleaned.includes(key)) {
+      const possible = responses[key];
+      const response = possible[Math.floor(Math.random() * possible.length)];
+      return typeof response === "function" ? response() : response;
+    }
+  }
+  return fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
 }
+
+chatForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const input = userInput.value.trim();
+  if (!input) return;
+
+  chatBox.innerHTML += `<div class="chat-message user">${input}</div>`;
+  const response = getBotResponse(input);
+  chatBox.innerHTML += `<div class="chat-message bot">${response}</div>`;
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+  userInput.value = "";
+});
 
