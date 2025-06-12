@@ -5,7 +5,7 @@ const themeToggle = document.getElementById('themeToggle');
 const scrollTop = document.getElementById('scrollTop');
 const micButton = document.getElementById('micButton');
 
-// Function to display a message
+// Display messages
 function addMessage(text, className) {
   const msg = document.createElement('div');
   msg.textContent = text;
@@ -14,24 +14,44 @@ function addMessage(text, className) {
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Basic logic to generate a reply
+// Reply logic
 function getBotResponse(input) {
   const message = input.toLowerCase();
+
+  const now = new Date();
+  const date = now.toLocaleDateString();
+  const time = now.toLocaleTimeString();
 
   if (message.includes("hi") || message.includes("hello") || message.includes("hey")) {
     return "Hello! How can I assist you?";
   } else if (message.includes("how are you")) {
-    return "I'm just code, but I'm running perfectly!";
+    return "I'm just code, but I'm running great!";
   } else if (message.includes("bye")) {
-    return "Goodbye! Come back soon.";
+    return "Goodbye! Have a great day.";
   } else if (message.includes("thank")) {
     return "You're welcome!";
+  } else if (message.includes("your name")) {
+    return "I’m your friendly AI chatbot.";
+  } else if (message.includes("who made you")) {
+    return "I was created by Ayanda Mabasa!";
+  } else if (message.includes("what can you do")) {
+    return "I can chat, answer questions, and keep you company!";
+  } else if (message.includes("tell me a joke")) {
+    return "Why don’t robots get tired? Because they recharge overnight!";
+  } else if (message.includes("date")) {
+    return `Today's date is ${date}.`;
+  } else if (message.includes("time")) {
+    return `The current time is ${time}.`;
+  } else if (message.includes("openai")) {
+    return "OpenAI is the amazing company that powers ChatGPT!";
+  } else if (message.includes("love you")) {
+    return "Aww, I love chatting with you too!";
   } else {
     return "Interesting! Tell me more.";
   }
 }
 
-// Handle form submission
+// On submit
 chatForm.addEventListener('submit', e => {
   e.preventDefault();
   const input = userInput.value.trim();
@@ -50,7 +70,7 @@ themeToggle.addEventListener('click', () => {
   document.body.classList.toggle('light');
 });
 
-// Scroll to top button
+// Scroll to top
 window.addEventListener('scroll', () => {
   scrollTop.style.display = window.scrollY > 100 ? 'block' : 'none';
 });
@@ -59,7 +79,7 @@ scrollTop.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// Optional: Speech-to-text (microphone button)
+// Speech to text
 const recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 if (recognition) {
   const mic = new recognition();
@@ -74,5 +94,3 @@ if (recognition) {
     userInput.value = transcript;
   };
 }
-
-
