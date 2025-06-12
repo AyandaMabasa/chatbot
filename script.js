@@ -69,20 +69,27 @@ const responses = {
   "cool": "Cool indeed!"
 };
 
-// Generate more placeholder responses for demo (up to 1000)
-for (let i = 0; i < 950; i++) {
-  responses["custom-response-" + i] = "This is response number " + (i + 1) + ". You can customize me!";
-}
+// Create keyword list for matching
+const keywordList = Object.keys(responses);
 
 function getBotResponse(input) {
-  input = input.toLowerCase().replace(/[^\w\s]/gi, ""); // normalize input
-  for (let key in responses) {
-    if (input.includes(key)) {
+  input = input.toLowerCase().replace(/[^\w\s]/gi, "");
+
+  for (let key of keywordList) {
+    const keyWords = key.split(" ");
+    let match = true;
+    for (let word of keyWords) {
+      if (!input.includes(word)) {
+        match = false;
+        break;
+      }
+    }
+    if (match) {
       const res = responses[key];
       return typeof res === "function" ? res() : res;
     }
   }
-  return "That’s interesting! Tell me more.";
+  return "Hmm, I'm not sure how to answer that yet. Try asking me something else!";
 }
 
 document.getElementById("chatForm").addEventListener("submit", function (e) {
@@ -133,3 +140,4 @@ function addMessage(sender, text) {
   chatBox.appendChild(msg);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
+
