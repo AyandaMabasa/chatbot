@@ -1,5 +1,3 @@
-// script.js
-
 const chatForm = document.getElementById("chatForm");
 const userInput = document.getElementById("userInput");
 const chatBox = document.getElementById("chatBox");
