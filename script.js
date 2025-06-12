@@ -1,97 +1,44 @@
-const API_KEY = "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"
+const chatBox = document.getElementById('chatBox');
+const chatForm = document.getElementById('chatForm');
+const userInput = document.getElementById('userInput');
 
-const chatForm = document.getElementById("chatForm");
-const userInput = document.getElementById("userInput");
-const chatBox = document.getElementById("chatBox");
-const scrollTopBtn = document.getElementById("scrollTop");
-const themeToggle = document.getElementById("themeToggle");
-const micButton = document.getElementById("micButton");
+// Optional basic response logic
+function getBotResponse(input) {
+  const message = input.toLowerCase();
 
-let isDark = false;
+  if (message.includes("hi") || message.includes("hello") || message.includes("hey")) {
+    return "Hello! How can I assist you?";
+  } else if (message.includes("how are you")) {
+    return "I'm just code, but I'm here to help you!";
+  } else if (message.includes("bye")) {
+    return "Goodbye! Come back if you need more help.";
+  } else if (message.includes("thank")) {
+    return "You're welcome!";
+  } else {
+    // Fallback for unknown inputs
+    return "Interesting! Tell me more.";
+  }
+}
 
-themeToggle.addEventListener("click", () => {
-  isDark = !isDark;
-  document.body.className = isDark ? "dark" : "light";
-});
-
-scrollTopBtn.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
-window.onscroll = () => {
-  scrollTopBtn.style.display = window.scrollY > 100 ? "block" : "none";
-};
-
-chatForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const message = userInput.value.trim();
-  if (!message) return;
-
-  addMessage(message, "user");
-  userInput.value = "";
-
-  const reply = await fetchOpenRouter(message);
-  addMessage(reply, "bot");
-  speakText(reply);
-});
-
-function addMessage(text, sender) {
-  const msg = document.createElement("div");
-  msg.className = `chat-message ${sender}`;
+function addMessage(text, className) {
+  const msg = document.createElement('div');
   msg.textContent = text;
+  msg.className = `chat-message ${className}`;
   chatBox.appendChild(msg);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-async function fetchOpenRouter(prompt) {
-  try {
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "openai/gpt-3.5-turbo",
-        messages: [
-          { role: "system", content: "You are a helpful assistant." },
-          { role: "user", content: prompt },
-        ],
-      }),
-    });
-    const data = await response.json();
-    return data.choices?.[0]?.message?.content || "(No response)";
-  } catch (error) {
-    console.error(error);
-    return "Sorry, something went wrong.";
-  }
-}
+chatForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const input = userInput.value.trim();
+  if (!input) return;
 
-micButton.addEventListener("click", () => {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) {
-    alert("Speech recognition not supported in this browser.");
-    return;
-  }
-  const recognition = new SpeechRecognition();
-  recognition.lang = "en-US";
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 1;
+  addMessage(input, 'user');
 
-  recognition.onresult = (event) => {
-    const transcript = event.results[0][0].transcript;
-    userInput.value = transcript;
-    chatForm.dispatchEvent(new Event("submit"));
-  };
+  const botReply = getBotResponse(input);
+  setTimeout(() => addMessage(botReply, 'bot'), 500);
 
-  recognition.onerror = (event) => {
-    console.error("Speech recognition error", event.error);
-  };
-
-  recognition.start();
+  userInput.value = '';
 });
 
-function speakText(text) {
-  if (!('speechSynthesis' in window)) return;
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "en-US";
-  speechSynthesis.speak(utterance);
-}
 
