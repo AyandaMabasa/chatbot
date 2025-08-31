@@ -1,116 +1,75 @@
-:root {
-  --bg-light: #ffffff;
-  --bg-dark: #121212;
-  --text-light: #000000;
-  --text-dark: #ffffff;
-  --primary: #4f46e5;
-}
-
 body {
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  transition: background 0.3s, color 0.3s;
-}
-
-body.light {
-  background-color: var(--bg-light);
-  color: var(--text-light);
-}
-
-body.dark {
-  background-color: var(--bg-dark);
-  color: var(--text-dark);
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  color: #000;
 }
 
 .chat-container {
-  max-width: 800px;
-  margin: 4rem auto;
-  padding: 1rem;
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
 }
 
-h1 {
+h2 {
   text-align: center;
-  color: var(--primary);
+  color: #4f46e5;
 }
 
 .chat-box {
-  height: 500px;
+  height: 300px;
   overflow-y: auto;
-  border: 1px solid #ccc;
-  padding: 1rem;
-  border-radius: 8px;
-  background-color: rgba(0, 0, 0, 0.05);
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 6px;
+  background-color: #f0f0f0;
 }
 
-.chat-message {
-  margin: 0.5rem 0;
-  padding: 0.5rem 1rem;
-  border-radius: 10px;
+.user-msg {
+  background-color: #4f46e5;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 8px;
+  margin: 5px 0;
+  align-self: flex-end;
   max-width: 80%;
   word-wrap: break-word;
 }
 
-.user {
-  background-color: var(--primary);
-  color: white;
-  align-self: flex-end;
-}
-
-.bot {
+.bot-msg {
   background-color: #e0e0e0;
+  color: #000;
+  padding: 6px 10px;
+  border-radius: 8px;
+  margin: 5px 0;
   align-self: flex-start;
+  max-width: 80%;
+  word-wrap: break-word;
 }
 
 form {
   display: flex;
-  gap: 0.5rem;
+  gap: 5px;
 }
 
 input[type="text"] {
   flex-grow: 1;
-  padding: 0.75rem;
+  padding: 8px;
   border-radius: 6px;
   border: 1px solid #ccc;
 }
 
 button {
-  background-color: var(--primary);
-  color: white;
+  background-color: #4f46e5;
+  color: #fff;
   border: none;
-  padding: 0.75rem 1rem;
+  padding: 8px 12px;
   border-radius: 6px;
   cursor: pointer;
-}
-
-#scrollTop {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  display: none;
-  background-color: var(--primary);
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 50%;
-  cursor: pointer;
-  z-index: 1000;
-}
-
-.theme-toggle {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  z-index: 1000;
-}
-
-.theme-toggle button {
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  border: none;
-  cursor: pointer;
-  background-color: var(--primary);
-  color: white;
 }
