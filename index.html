@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Minimal Chatbot</title>
+  <title>Friendly Chatbot</title>
   <style>
     body {
       margin: 0;
@@ -15,10 +15,10 @@
     }
 
     .chat-wrapper {
-      width: 350px;
+      width: 360px;
       background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -27,25 +27,25 @@
     .chat-header {
       background-color: #4f46e5;
       color: #fff;
-      padding: 10px;
+      padding: 12px;
       text-align: center;
       font-weight: bold;
     }
 
     .chat-messages {
-      padding: 10px;
-      height: 300px;
+      padding: 12px;
+      height: 320px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 6px;
       background-color: #f0f0f0;
     }
 
     .message {
       padding: 8px 12px;
-      border-radius: 15px;
-      max-width: 80%;
+      border-radius: 16px;
+      max-width: 75%;
       word-wrap: break-word;
     }
 
@@ -79,13 +79,12 @@
       color: #fff;
       cursor: pointer;
     }
-
   </style>
 </head>
 <body>
 
   <div class="chat-wrapper">
-    <div class="chat-header">Chat with Me</div>
+    <div class="chat-header">Friendly Chatbot 🤖</div>
     <div id="chatMessages" class="chat-messages"></div>
     <form id="chatForm" class="chat-input">
       <input type="text" id="chatInput" placeholder="Type a message..." required />
@@ -98,24 +97,45 @@
     const chatInput = document.getElementById('chatInput');
     const chatMessages = document.getElementById('chatMessages');
 
+    // Bot knowledge with multiple variations
     const botResponses = {
-      "hello": ["Hi there!", "Hello! 👋"],
-      "how are you": ["I'm good, thanks!", "Doing great, how about you?"],
-      "bye": ["Goodbye!", "See you later!"],
-      "joke": ["Why did the computer go to the doctor? It had a virus! 😄"]
+      greetings: ["hi", "hello", "hey", "good morning", "good afternoon", "good evening"],
+      farewells: ["bye", "goodbye", "see you", "later"],
+      howAreYou: ["how are you", "how's it going", "how do you do"],
+      jokes: ["joke", "tell me a joke", "make me laugh"],
+      nameQuestions: ["your name", "who are you", "what are you called"],
+      aiQuestions: ["what is ai", "define ai", "explain ai"]
     };
 
-    const fallback = ["Hmm, I don't understand.", "Can you rephrase that?", "Interesting..."];
+    const botReplies = {
+      greetings: ["Hello! 👋", "Hi there! How can I help you?", "Hey! Nice to chat with you!"],
+      farewells: ["Goodbye! 👋", "See you later!", "Take care!"],
+      howAreYou: ["I'm just a friendly bot, doing great! 😄", "All good here! How about you?"],
+      jokes: ["Why did the computer go to the doctor? It had a virus! 🤣", "I would tell a UDP joke, but you might not get it 😅"],
+      nameQuestions: ["I'm your friendly chatbot 🤖", "You can call me Chatty!"],
+      aiQuestions: ["AI means Artificial Intelligence. I try to mimic human conversation! 🤖"]
+    };
 
-    function getBotReply(msg) {
-      const text = msg.toLowerCase();
+    const fallbackReplies = [
+      "Hmm, I’m not sure I understand 😅, but I’d love to chat more!",
+      "Interesting! Could you rephrase that?",
+      "I don’t know that one yet, but I’m learning every day!"
+    ];
+
+    function getBotReply(message) {
+      const text = message.toLowerCase();
+
       for (let key in botResponses) {
-        if (text.includes(key)) {
-          const options = botResponses[key];
-          return options[Math.floor(Math.random() * options.length)];
+        for (let phrase of botResponses[key]) {
+          if (text.includes(phrase)) {
+            const options = botReplies[key];
+            return options[Math.floor(Math.random() * options.length)];
+          }
         }
       }
-      return fallback[Math.floor(Math.random() * fallback.length)];
+
+      // fallback if nothing matches
+      return fallbackReplies[Math.floor(Math.random() * fallbackReplies.length)];
     }
 
     chatForm.addEventListener('submit', (e) => {
@@ -140,7 +160,6 @@
 
 </body>
 </html>
-
 
 
 
