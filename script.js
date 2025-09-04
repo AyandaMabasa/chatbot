@@ -41,7 +41,10 @@ chatForm.addEventListener("submit", (e) => {
   const input = userInput.value.trim();
   if (!input) return;
 
+  // Add user message
   chatBox.innerHTML += `<div class="chat-message user"><div class="chat-label">You</div>${input}</div>`;
+
+  // Bot response
   const response = getBotResponse(input);
   chatBox.innerHTML += `<div class="chat-message bot"><div class="chat-label">Bot</div>${response}</div>`;
 
