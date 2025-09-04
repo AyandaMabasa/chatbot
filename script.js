@@ -54,3 +54,4 @@ chatForm.addEventListener("submit", (e) => {
 clearBtn.addEventListener("click", () => {
   chatBox.innerHTML = "";
 });
+
