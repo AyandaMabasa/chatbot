@@ -1,7 +1,6 @@
 const chatForm = document.getElementById("chatForm");
 const userInput = document.getElementById("userInput");
 const chatBox = document.getElementById("chatBox");
-const clearBtn = document.getElementById("clearBtn");
 
 const responses = [
   { keywords: ["hi", "hello", "hey", "hiya", "hey there"], answers: ["Hello! 😊", "Hey there!", "Hi, how can I help you today?"] },
@@ -49,9 +48,3 @@ chatForm.addEventListener("submit", (e) => {
   chatBox.scrollTop = chatBox.scrollHeight;
   userInput.value = "";
 });
-
-// Clear chat functionality
-clearBtn.addEventListener("click", () => {
-  chatBox.innerHTML = "";
-});
-
