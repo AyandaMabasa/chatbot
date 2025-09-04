@@ -2,35 +2,71 @@ const chatForm = document.getElementById("chatForm");
 const userInput = document.getElementById("userInput");
 const chatBox = document.getElementById("chatBox");
 
-const responses = {
-  "hi": ["Hello! 😊", "Hey there!", "Hi, how can I help you today?"],
-  "how are you": ["I'm just a bot, but I'm doing great! 🤖", "Fantastic, thanks for asking!"],
-  "what is your name": ["I'm your Chatbot."],
-  "what is ai": ["AI stands for Artificial Intelligence. It's how machines mimic human intelligence."],
-  "tell me a joke": ["Why did the computer go to the doctor? It had a virus! 🤣"],
-  "what time is it": [() => `It's ${new Date().toLocaleTimeString()}`],
-  "what date is it": [() => `Today is ${new Date().toLocaleDateString()}`],
-  "i'm bored": ["Want to hear a joke? Or ask me anything!", "Let's play 20 questions! You start!"],
-  "thank you": ["You're welcome! 🙌", "Anytime!"],
-  "bye": ["Goodbye! 👋", "See you later!"],
-  "sure": ["Great! Let's do it!", "Alright, sounds good!"],
-  "okay": ["Got it! ✅", "Okay, what's next?"]
-};
+// Expanded keyword responses
+const responses = [
+  {
+    keywords: ["hi", "hello", "hey", "hiya", "hey there"],
+    answers: ["Hello! 😊", "Hey there!", "Hi, how can I help you today?"]
+  },
+  {
+    keywords: ["how are you", "how's it going", "how are you doing"],
+    answers: ["I'm just a bot, but I'm doing great! 🤖", "Fantastic, thanks for asking!"]
+  },
+  {
+    keywords: ["what is your name"],
+    answers: ["I'm your Chatbot."]
+  },
+  {
+    keywords: ["who built you", "who made you"],
+    answers: ["I was built by Ayanda Mabasa!"]
+  },
+  {
+    keywords: ["what is ai"],
+    answers: ["AI stands for Artificial Intelligence. It's how machines mimic human intelligence."]
+  },
+  {
+    keywords: ["tell me a joke"],
+    answers: ["Why did the computer go to the doctor? It had a virus! 🤣"]
+  },
+  {
+    keywords: ["what time is it"],
+    answers: [() => `It's ${new Date().toLocaleTimeString()}`]
+  },
+  {
+    keywords: ["what date is it"],
+    answers: [() => `Today is ${new Date().toLocaleDateString()}`]
+  },
+  {
+    keywords: ["i'm bored", "bored"],
+    answers: ["Want to hear a joke? Or ask me anything!", "Let's play 20 questions! You start!"]
+  },
+  {
+    keywords: ["thank you", "thanks"],
+    answers: ["You're welcome! 🙌", "Anytime!"]
+  },
+  {
+    keywords: ["bye", "goodbye", "see you"],
+    answers: ["Goodbye! 👋", "See you later!"]
+  },
+  {
+    keywords: ["sure", "okay", "ok"],
+    answers: ["Great! Let's do it!", "Alright, sounds good!"]
+  }
+];
 
 const fallbackResponses = [
-  "That's interesting! Tell me more.",
-  "I'm still learning, but I’d love to hear more.",
-  "Hmm, I'm not sure yet—but I'm here to chat!",
-  "Could you rephrase that? I'm curious.",
-  "That's beyond my current knowledge, but I’m learning fast!"
+  "Hmm, I don’t know about that 😅",
+  "That’s new to me! 😅",
+  "I wish I knew the answer 😅",
+  "Could you ask me something else?",
+  "Interesting! I’m still learning 😅"
 ];
 
 function getBotResponse(input) {
   const cleaned = input.toLowerCase();
-  for (const key in responses) {
-    if (cleaned.includes(key)) {
-      const possible = responses[key];
-      const response = possible[Math.floor(Math.random() * possible.length)];
+  for (const item of responses) {
+    if (item.keywords.some(keyword => cleaned.includes(keyword))) {
+      const response = item.answers[Math.floor(Math.random() * item.answers.length)];
       return typeof response === "function" ? response() : response;
     }
   }
