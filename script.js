@@ -1,6 +1,7 @@
 const chatForm = document.getElementById("chatForm");
 const userInput = document.getElementById("userInput");
 const chatBox = document.getElementById("chatBox");
+const clearBtn = document.getElementById("clearBtn");
 
 const responses = [
   { keywords: ["hi", "hello", "hey", "hiya", "hey there"], answers: ["Hello! 😊", "Hey there!", "Hi, how can I help you today?"] },
@@ -41,13 +42,15 @@ chatForm.addEventListener("submit", (e) => {
   const input = userInput.value.trim();
   if (!input) return;
 
-  // Add user message
   chatBox.innerHTML += `<div class="chat-message user"><div class="chat-label">You</div>${input}</div>`;
-
-  // Bot response
   const response = getBotResponse(input);
   chatBox.innerHTML += `<div class="chat-message bot"><div class="chat-label">Bot</div>${response}</div>`;
 
   chatBox.scrollTop = chatBox.scrollHeight;
   userInput.value = "";
+});
+
+// Clear chat functionality
+clearBtn.addEventListener("click", () => {
+  chatBox.innerHTML = "";
 });
